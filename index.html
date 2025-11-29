@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>КРИПТОС | Интеллектуальный экстрим-квест</title>
+    <title>КРИПТОС | Испытай свою смекалку</title>
     <style>
         * {
             margin: 0;
@@ -15,350 +15,156 @@
             background: #0a0a0a;
             color: #00ff41;
             font-family: 'Courier New', monospace;
-            overflow: hidden;
             height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            text-align: center;
             position: relative;
         }
 
-        /* Анимированный фон с вопросительными знаками */
-        .background {
+        .screen.active {
+            display: flex;
+        }
+
+        /* Анимированный фон с частицами */
+        .particles {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 50%, #1a1a1a 0%, #0a0a0a 100%),
-                repeating-linear-gradient(45deg, transparent, transparent 2px, #111 3px);
-            overflow: hidden;
         }
 
-        .question-mark {
+        .particle {
             position: absolute;
-            color: rgba(0, 255, 65, 0.3);
-            font-size: 24px;
-            font-weight: bold;
+            width: 2px;
+            height: 2px;
+            background: #00ff41;
+            border-radius: 50%;
             animation: float 15s infinite linear;
-            text-shadow: 0 0 5px #00ff41;
+            opacity: 0.3;
         }
 
         @keyframes float {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(100vh) translateX(0) rotate(0deg);
                 opacity: 0;
             }
             10% {
-                opacity: 0.6;
+                opacity: 0.5;
             }
             90% {
-                opacity: 0.6;
+                opacity: 0.5;
             }
             100% {
-                transform: translateY(-100px) rotate(360deg);
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
                 opacity: 0;
             }
         }
 
-        /* Главный контейнер */
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 4rem;
+        /* Заголовки */
+        .main-title {
+            font-size: 3.5rem;
             font-weight: bold;
             margin-bottom: 2rem;
-            text-shadow: 0 0 10px #00ff41;
-            animation: glow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 20px #00ff41;
+            background: linear-gradient(45deg, #00ff41, #00cc33);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 2s ease-in-out infinite alternate;
         }
 
-        @keyframes glow {
+        @keyframes titleGlow {
             from {
-                text-shadow: 0 0 10px #00ff41;
+                text-shadow: 0 0 20px #00ff41;
             }
             to {
-                text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41;
+                text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41;
             }
         }
 
-        /* Круглая кнопка старта с прогрессом */
-        .start-btn-circle {
-            position: relative;
-            width: 200px; /* Увеличил для телефона */
-            height: 200px; /* Увеличил для телефона */
-            border: 3px solid #00ff41; /* Толще для видимости */
-            border-radius: 50%;
-            background: transparent;
-            color: #00ff41;
-            font-size: 1.3rem; /* Увеличил текст */
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            margin: 2rem 0;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .start-btn-circle:hover {
-            box-shadow: 0 0 30px #00ff41;
-        }
-
-        .start-btn-circle:active {
-            transform: scale(0.95);
-        }
-
-        .progress-ring {
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            width: 208px;
-            height: 208px;
-            border-radius: 50%;
-            background: conic-gradient(transparent 0deg, #00ff41 0deg);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .start-btn-circle.holding .progress-ring {
-            opacity: 1;
-        }
-
-        /* Кнопка активации слева сверху */
-        .activate-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: transparent;
+        /* Провокационные вопросы */
+        .question-box {
+            background: rgba(0, 255, 65, 0.05);
             border: 1px solid #00ff41;
-            color: #00ff41;
-            padding: 12px 20px;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-        }
-
-        .activate-btn:hover {
-            background: #00ff41;
-            color: #0a0a0a;
-            box-shadow: 0 0 15px #00ff41;
-        }
-
-        /* Кнопка личного кабинета */
-        .profile-btn {
-            position: fixed;
-            top: 20px;
-            right: 70px; /* Сдвинул от края */
-            background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            z-index: 1000;
-            display: none; /* Скрыта пока нет авторизации */
-        }
-
-        .profile-btn:hover {
-            background: #00ff41;
-            color: #0a0a0a;
-        }
-
-        /* Окно авторизации/регистрации */
-        .auth-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 90%;
-            max-width: 400px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 2px solid #00ff41;
+            border-radius: 15px;
             padding: 2rem;
-            z-index: 2000;
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            margin: 1rem 0;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.5s ease-out;
         }
 
-        .auth-modal.active {
-            transform: translate(-50%, -50%) scale(1);
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .auth-modal h3 {
-            margin-bottom: 1rem;
-            color: #00ff41;
-            text-align: center;
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #00ff41;
-        }
-
-        .auth-tab {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #00ff41;
-            padding: 10px;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-            transition: all 0.3s ease;
-        }
-
-        .auth-tab.active {
-            background: #00ff41;
-            color: #0a0a0a;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #00ff41;
-        }
-
-        .form-input {
-            width: 100%;
-            background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            outline: none;
-        }
-
-        .form-input:focus {
-            box-shadow: 0 0 10px #00ff41;
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            padding: 12px;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .submit-btn:hover {
-            background: #00ff41;
-            color: #0a0a0a;
-        }
-
-        .close-auth {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            color: #00ff41;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Окно личного кабинета */
-        .profile-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 90%;
-            max-width: 400px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 2px solid #00ff41;
-            padding: 2rem;
-            z-index: 2000;
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-        }
-
-        .profile-modal.active {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .user-info {
+        .question-text {
+            font-size: 1.3rem;
             margin-bottom: 1.5rem;
+            line-height: 1.5;
         }
 
-        .user-info h4 {
-            color: #00ff41;
-            margin-bottom: 0.5rem;
-        }
-
-        .close-profile {
-            position: absolute;
-            top: 10px;
-            right: 15px;
+        /* Кнопки */
+        .btn {
             background: transparent;
-            border: none;
+            border: 2px solid #00ff41;
             color: #00ff41;
-            font-size: 1.5rem;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-family: 'Courier New', monospace;
             cursor: pointer;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1999;
-            display: none;
+        .btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 25px #00ff41;
         }
 
-        .modal-overlay.active {
-            display: block;
+        .btn:active {
+            transform: scale(0.95);
         }
 
         /* Таймер */
         .timer {
-            font-size: 3rem;
-            font-family: 'Segment7', monospace;
-            margin: 2rem 0;
+            font-size: 2.5rem;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
             text-shadow: 0 0 10px #00ff41;
-            display: none;
+            background: rgba(0, 255, 65, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid #00ff41;
         }
 
-        .timer.active {
-            display: block;
+        .timer.warning {
+            color: #ff4444;
+            text-shadow: 0 0 10px #ff4444;
             animation: pulse 1s infinite;
         }
 
@@ -367,692 +173,379 @@
             50% { opacity: 0.7; }
         }
 
-        /* Сообщение об ошибке */
-        .error-message {
-            display: none;
+        /* Загадки */
+        .riddle-box {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid #00ff41;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            max-width: 800px;
+            backdrop-filter: blur(10px);
+        }
+
+        .riddle-title {
             font-size: 1.5rem;
-            margin: 2rem 0;
-            color: #ff0033;
-            text-shadow: 0 0 10px #ff0033;
-            text-align: center;
+            margin-bottom: 1rem;
+            color: #00ff41;
         }
 
-        .error-message.active {
-            display: block;
-            animation: error-shake 0.5s;
+        .riddle-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
 
-        @keyframes error-shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        /* Кнопка информации */
-        .info-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        .hint-btn {
             background: transparent;
             border: 1px solid #00ff41;
             color: #00ff41;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            padding: 8px 15px;
+            margin: 10px 0;
             cursor: pointer;
-            font-size: 1.2rem;
-            z-index: 1000;
+            font-family: 'Courier New', monospace;
+            border-radius: 15px;
+            transition: all 0.3s ease;
         }
 
-        .info-btn:hover {
+        .hint-btn:hover {
             background: #00ff41;
             color: #0a0a0a;
         }
 
-        /* Информационная панель */
-        .info-panel {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: rgba(10, 10, 10, 0.95);
-            border-left: 2px solid #00ff41;
-            padding: 2rem;
-            transition: right 0.3s ease;
-            z-index: 999;
-            overflow-y: auto;
-        }
-
-        .info-panel.active {
-            right: 0;
-        }
-
-        .info-panel h2 {
-            margin-bottom: 1rem;
-            color: #00ff41;
-        }
-
-        .info-panel p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            color: #00ff41;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Консоль */
-        .console {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            border-top: 1px solid #00ff41;
-            padding: 10px;
+        .hint {
             display: none;
-            font-family: 'Courier New', monospace;
+            background: rgba(0, 255, 65, 0.1);
+            border-left: 2px solid #00ff41;
+            padding: 10px;
+            margin: 10px 0;
             font-size: 0.9rem;
+            border-radius: 0 10px 10px 0;
         }
 
-        .console.active {
+        .hint.active {
             display: block;
         }
 
-        .console-input {
+        /* Поле ввода */
+        .answer-input {
+            width: 100%;
+            max-width: 400px;
             background: transparent;
-            border: none;
+            border: 1px solid #00ff41;
             color: #00ff41;
+            padding: 12px 15px;
             font-family: 'Courier New', monospace;
-            width: calc(100% - 120px);
+            font-size: 1rem;
+            margin: 1rem 0;
+            border-radius: 10px;
             outline: none;
         }
 
-        /* Адаптивность для телефона */
+        .answer-input:focus {
+            box-shadow: 0 0 15px #00ff41;
+        }
+
+        .attempts-counter {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        /* Факты о КРИПТОС */
+        .fact-box {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid #00ff41;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .fact-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* Адаптивность */
         @media (max-width: 768px) {
-            .logo {
+            .main-title {
                 font-size: 2.5rem;
+            }
+            
+            .question-box, .riddle-box, .fact-box {
+                padding: 1.5rem;
+                margin: 0.5rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
             }
             
             .timer {
                 font-size: 2rem;
             }
-            
-            .info-panel {
-                width: 100%;
-                right: -100%;
-            }
-            
-            .auth-modal,
-            .profile-modal {
-                width: 95%;
-                padding: 1.5rem;
-            }
-            
-            .start-btn-circle {
-                width: 180px;
-                height: 180px;
-                font-size: 1.2rem;
-            }
-            
-            .progress-ring {
-                width: 188px;
-                height: 188px;
-            }
-            
-            .activate-btn {
-                padding: 10px 15px;
-                font-size: 0.8rem;
-            }
-            
-            .profile-btn {
-                right: 60px;
-            }
         }
 
         @media (max-width: 480px) {
-            .logo {
+            .main-title {
                 font-size: 2rem;
             }
             
-            .start-btn-circle {
-                width: 160px;
-                height: 160px;
-                font-size: 1.1rem;
+            .btn {
+                padding: 12px 30px;
+                font-size: 1rem;
             }
             
-            .progress-ring {
-                width: 168px;
-                height: 168px;
-            }
-            
-            .activate-btn {
-                font-size: 0.7rem;
-                padding: 8px 12px;
+            .timer {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Анимированный фон -->
-    <div class="background" id="background"></div>
+    <!-- Анимированные частицы -->
+    <div class="particles" id="particles"></div>
 
-    <!-- Кнопка активации -->
-    <button class="activate-btn" onclick="showAuthModal()">Активизировать</button>
-
-    <!-- Кнопка личного кабинета -->
-    <button class="profile-btn" id="profileBtn" onclick="showProfileModal()">👤</button>
-
-    <!-- Кнопка информации -->
-    <button class="info-btn" onclick="toggleInfo()">i</button>
-
-    <!-- Окно авторизации -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeAllModals()"></div>
-    <div class="auth-modal" id="authModal">
-        <button class="close-auth" onclick="closeAllModals()">×</button>
-        <h3>ДОСТУП К СИСТЕМЕ</h3>
-        <div class="auth-tabs">
-            <button class="auth-tab active" onclick="switchAuthTab('login')">Вход</button>
-            <button class="auth-tab" onclick="switchAuthTab('register')">Регистрация</button>
+    <!-- Экран 1: Провокационные вопросы -->
+    <div class="screen active" id="screen1">
+        <h1 class="main-title">КРИПТОС</h1>
+        
+        <div class="question-box" id="question1">
+            <div class="question-text">
+                Ты считаешь, что в жизни всё решают «правильные знакомства» и связи?
+            </div>
         </div>
         
-        <!-- Форма входа -->
-        <div class="auth-form active" id="loginForm">
-            <div class="form-group">
-                <label>E-mail:</label>
-                <input type="email" class="form-input" id="loginEmail" placeholder="your@email.com">
+        <button class="btn" onclick="nextQuestion()">Дальше</button>
+    </div>
+
+    <!-- Экран 2: Принципы -->
+    <div class="screen" id="screen2">
+        <div class="question-box">
+            <div class="question-text" style="font-size: 1.4rem;">
+                Тут не решает ничего, кроме твоей смекалки и находчивости!
             </div>
-            <div class="form-group">
-                <label>Пароль:</label>
-                <input type="password" class="form-input" id="loginPassword" placeholder="••••••••">
-            </div>
-            <button class="submit-btn" onclick="login()">Войти в систему</button>
         </div>
+        <button class="btn" onclick="showDisclaimer()">Начать испытание</button>
+    </div>
+
+    <!-- Экран 3: Дисклеймер -->
+    <div class="screen" id="screen3">
+        <div class="question-box">
+            <div class="question-text">
+                ⚠️ ВНИМАНИЕ ⚠️<br><br>
+                На решение задачи у тебя есть ровно 24 часа.<br>
+                Если ты не успеешь — ты выбываешь из игры.<br><br>
+                Правила просты: решай задачу → получай доступ к следующей.
+            </div>
+        </div>
+        <button class="btn" onclick="startRiddles()">Я понимаю и принимаю правила</button>
+    </div>
+
+    <!-- Экран 4: Загадка 1.1 -->
+    <div class="screen" id="screen4">
+        <div class="timer" id="timer1">24:00:00</div>
         
-        <!-- Форма регистрации -->
-        <div class="auth-form" id="registerForm">
-            <div class="form-group">
-                <label>E-mail:</label>
-                <input type="email" class="form-input" id="registerEmail" placeholder="your@email.com">
+        <div class="riddle-box">
+            <div class="riddle-title">Задание 1.1: "Социальный инжиниринг"</div>
+            <div class="riddle-text">
+                <strong>Цель:</strong> Найти закрытый аккаунт в Instagram.<br><br>
+                Подсказки из его Stories:
+                <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
+                    <li>Увлекается урбанистикой и фотографирует граффити</li>
+                    <li>Был на выставке Василия Ложкина в Москве в 2023</li>
+                    <li>Работает в IT-сфере</li>
+                </ul>
+                <strong>Задача:</strong> Найди username этого аккаунта.
             </div>
-            <div class="form-group">
-                <label>Никнейм (нельзя изменить):</label>
-                <input type="text" class="form-input" id="registerUsername" placeholder="Ваш уникальный ник">
+            
+            <button class="hint-btn" onclick="showHint('hint1_1')">💡 Подсказка</button>
+            <div class="hint" id="hint1_1">
+                Аккаунт упоминался в комментариях под постом о street-art в паблике "Арт-Москва". 
+                Ищи по геолокациям выставок и хештегам #уличноеискусство.
             </div>
-            <div class="form-group">
-                <label>Пароль:</label>
-                <input type="password" class="form-input" id="registerPassword" placeholder="••••••••">
-            </div>
-            <div class="form-group">
-                <label>Повторите пароль:</label>
-                <input type="password" class="form-input" id="registerPasswordConfirm" placeholder="••••••••">
-            </div>
-            <button class="submit-btn" onclick="register()">Создать аккаунт</button>
+
+            <div class="attempts-counter" id="attempts1">Попыток осталось: 4</div>
+            <input type="text" class="answer-input" id="answer1_1" placeholder="Введите username...">
+            <button class="btn" onclick="checkAnswer(1, 'urban_explorer_23')">Проверить ответ</button>
         </div>
     </div>
 
-    <!-- Окно личного кабинета -->
-    <div class="profile-modal" id="profileModal">
-        <button class="close-profile" onclick="closeAllModals()">×</button>
-        <h3>ЛИЧНЫЙ КАБИНЕТ</h3>
-        
-        <div class="user-info">
-            <h4>Информация аккаунта:</h4>
-            <p>Никнейм: <span id="profileUsername">-</span></p>
-            <p>E-mail: <span id="profileEmail">-</span></p>
-            <p>Статус: <span id="profileStatus">Не активирован</span></p>
+    <!-- Экран 5: Факт после загадки 1.1 -->
+    <div class="screen" id="screen5">
+        <div class="fact-box">
+            <div class="fact-text">
+                "КРИПТОС — закрытый клуб, где статус определяется не деньгами, а интеллектом. 
+                Только 2% людей проходят первый отбор. Ты доказал, что можешь быть одним из нас."
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label>Новый E-mail:</label>
-            <input type="email" class="form-input" id="newEmail" placeholder="new@email.com">
-        </div>
-        <div class="form-group">
-            <label>Новый пароль:</label>
-            <input type="password" class="form-input" id="newPassword" placeholder="••••••••">
-        </div>
-        <div class="form-group">
-            <label>Повторите новый пароль:</label>
-            <input type="password" class="form-input" id="newPasswordConfirm" placeholder="••••••••">
-        </div>
-        <button class="submit-btn" onclick="updateProfile()">Обновить данные</button>
-        <button class="submit-btn" onclick="logout()" style="margin-top: 10px; background: rgba(255, 0, 0, 0.2);">Выйти из системы</button>
+        <button class="btn" onclick="nextRiddle(2)">Принять вызов дальше</button>
     </div>
 
-    <!-- Информационная панель -->
-    <div class="info-panel" id="infoPanel">
-        <button class="close-btn" onclick="toggleInfo()">×</button>
-        <h2>ПРОТОКОЛ КРИПТОС</h2>
-        <p>Система активирована. Ожидайте контакта в установленном порядке.</p>
-        <p>Обнаружено скрытое соединение...</p>
-        <p>Сканирование сети...</p>
-        <p>Криптографический ключ не обнаружен</p>
-        <p>Для доступа к полному функционалу требуется авторизация.</p>
-    </div>
+    <!-- Экран 6: Загадка 1.2 -->
+    <div class="screen" id="screen6">
+        <div class="timer" id="timer2">24:00:00</div>
+        
+        <div class="riddle-box">
+            <div class="riddle-title">Задание 1.2: "Координатный детектив"</div>
+            <div class="riddle-text">
+                <strong>Цель:</strong> Найти место по описанию.<br><br>
+                Отрывок из жалобы в городском паблике Ростова-на-Дону:
+                <blockquote style="margin: 15px 0; padding: 10px; border-left: 2px solid #00ff41; background: rgba(0,255,65,0.05);">
+                    "Уже месяц не могут починить разбитую плитку у входа в парк 'Южный' рядом с детской площадкой, где есть горка в виде дракона."
+                </blockquote>
+                <strong>Задача:</strong> Найди координаты этого места (широта и долгота через подчёркивание).
+            </div>
+            
+            <button class="hint-btn" onclick="showHint('hint1_2')">💡 Подсказка</button>
+            <div class="hint" id="hint1_2">
+                Парк "Южный" находится в Советском районе. Ищи детскую площадку с нестандартным дизайном 
+                на картах Яндекса/Google. Формат ответа: XX.XXXX_YY.YYYY
+            </div>
 
-    <!-- Главный контейнер -->
-    <div class="container">
-        <div class="logo">КРИПТОС</div>
-        
-        <div class="start-btn-circle" id="startBtnCircle" 
-             onmousedown="startHold()" 
-             onmouseup="stopHold()" 
-             onmouseleave="stopHold()"
-             ontouchstart="startHold()" 
-             ontouchend="stopHold()">
-            <div class="progress-ring" id="progressRing"></div>
-            Начать игру?
-        </div>
-        
-        <div class="timer" id="timer">00:00:00</div>
-        
-        <div class="error-message" id="errorMessage">
-            ☹ Доступ отклонён. Требуется авторизация
-            <br>
-            <button class="activate-btn" onclick="showAuthModal()" style="margin-top: 1rem; font-size: 1rem;">
-                Активизировать доступ
-            </button>
+            <div class="attempts-counter" id="attempts2">Попыток осталось: 4</div>
+            <input type="text" class="answer-input" id="answer1_2" placeholder="Введите координаты...">
+            <button class="btn" onclick="checkAnswer(2, '47.2215_39.7243')">Проверить ответ</button>
         </div>
     </div>
 
-    <!-- Консоль -->
-    <div class="console" id="console">
-        <span>console></span>
-        <input type="text" class="console-input" id="consoleInput" placeholder="Введите команду...">
+    <!-- Экран 7: Факт после загадки 1.2 -->
+    <div class="screen" id="screen7">
+        <div class="fact-box">
+            <div class="fact-text">
+                "Члены КРИПТОС получают доступ к эксклюзивным возможностям: от инвестиционных советов 
+                до закрытых карьерных предложений. Ты на шаг ближе к этому."
+            </div>
+        </div>
+        <button class="btn" onclick="nextRiddle(3)">Продолжить путь</button>
     </div>
 
     <script>
-        // Данные пользователя (в реальном приложении - бэкенд)
-        let currentUser = null;
-        let gameStarted = false;
-        let paidUser = false;
-        let holdTimer = null;
-        let holdProgress = 0;
-        const HOLD_DURATION = 3000;
-
-        // Создание анимированных вопросительных знаков
-        function createQuestionMarks() {
-            const background = document.getElementById('background');
-            const marksCount = 25;
+        // Создание анимированных частиц
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            const count = 50;
             
-            for (let i = 0; i < marksCount; i++) {
-                const mark = document.createElement('div');
-                mark.className = 'question-mark';
-                mark.textContent = '?';
-                mark.style.left = Math.random() * 100 + 'vw';
-                mark.style.animationDelay = Math.random() * 15 + 's';
-                mark.style.fontSize = (Math.random() * 20 + 16) + 'px';
-                mark.style.color = `rgba(0, 255, 65, ${0.2 + Math.random() * 0.3})`;
-                background.appendChild(mark);
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.width = particle.style.height = (Math.random() * 3 + 1) + 'px';
+                particles.appendChild(particle);
             }
         }
 
-        // Управление модальными окнами
-        function showAuthModal() {
-            closeAllModals();
-            document.getElementById('authModal').classList.add('active');
-            document.getElementById('modalOverlay').classList.add('active');
-        }
+        // Вопросы
+        const questions = [
+            "Ты думаешь, благодаря деньгам можно решить любую проблему?",
+            "Ты веришь, что диплом престижного ВУЗа гарантирует успех?",
+            "Ты считаешь, что настоящее влияние достигается только через связи?"
+        ];
 
-        function showProfileModal() {
-            if (!currentUser) {
-                showAuthModal();
-                return;
-            }
-            closeAllModals();
-            updateProfileDisplay();
-            document.getElementById('profileModal').classList.add('active');
-            document.getElementById('modalOverlay').classList.add('active');
-        }
+        let currentQuestion = 0;
 
-        function closeAllModals() {
-            document.getElementById('authModal').classList.remove('active');
-            document.getElementById('profileModal').classList.remove('active');
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            
-            document.querySelector(`.auth-tab[onclick="switchAuthTab('${tab}')"]`).classList.add('active');
-            document.getElementById(tab + 'Form').classList.add('active');
-        }
-
-        // Регистрация
-        function register() {
-            const email = document.getElementById('registerEmail').value;
-            const username = document.getElementById('registerUsername').value;
-            const password = document.getElementById('registerPassword').value;
-            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
-            
-            if (!email || !username || !password) {
-                alert('Заполните все поля!');
-                return;
-            }
-            
-            if (password !== passwordConfirm) {
-                alert('Пароли не совпадают!');
-                return;
-            }
-            
-            if (password.length < 6) {
-                alert('Пароль должен быть не менее 6 символов!');
-                return;
-            }
-            
-            // Сохраняем пользователя (в реальном приложении - запрос к бэкенду)
-            currentUser = {
-                email: email,
-                username: username,
-                password: password,
-                status: 'active'
-            };
-            
-            localStorage.setItem('cryptos_user', JSON.stringify(currentUser));
-            
-            alert('Регистрация успешна!');
-            closeAllModals();
-            updateUI();
-        }
-
-        // Вход
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            const savedUser = localStorage.getItem('cryptos_user');
-            if (savedUser) {
-                const user = JSON.parse(savedUser);
-                if (user.email === email && user.password === password) {
-                    currentUser = user;
-                    alert('Вход выполнен!');
-                    closeAllModals();
-                    updateUI();
-                    return;
-                }
-            }
-            
-            alert('Неверный email или пароль!');
-        }
-
-        // Выход
-        function logout() {
-            currentUser = null;
-            paidUser = false;
-            closeAllModals();
-            updateUI();
-            alert('Вы вышли из системы');
-        }
-
-        // Обновление профиля
-        function updateProfile() {
-            if (!currentUser) return;
-            
-            const newEmail = document.getElementById('newEmail').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const newPasswordConfirm = document.getElementById('newPasswordConfirm').value;
-            
-            if (newEmail) {
-                currentUser.email = newEmail;
-            }
-            
-            if (newPassword) {
-                if (newPassword !== newPasswordConfirm) {
-                    alert('Пароли не совпадают!');
-                    return;
-                }
-                if (newPassword.length < 6) {
-                    alert('Пароль должен быть не менее 6 символов!');
-                    return;
-                }
-                currentUser.password = newPassword;
-            }
-            
-            localStorage.setItem('cryptos_user', JSON.stringify(currentUser));
-            updateProfileDisplay();
-            alert('Данные обновлены!');
-            
-            // Очищаем поля
-            document.getElementById('newEmail').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('newPasswordConfirm').value = '';
-        }
-
-        function updateProfileDisplay() {
-            if (currentUser) {
-                document.getElementById('profileUsername').textContent = currentUser.username;
-                document.getElementById('profileEmail').textContent = currentUser.email;
-                document.getElementById('profileStatus').textContent = paidUser ? 'Активирован' : 'Не активирован';
-            }
-        }
-
-        function updateUI() {
-            const profileBtn = document.getElementById('profileBtn');
-            if (currentUser) {
-                profileBtn.style.display = 'block';
+        function nextQuestion() {
+            if (currentQuestion < questions.length) {
+                document.getElementById('question1').innerHTML = 
+                    `<div class="question-text">${questions[currentQuestion]}</div>`;
+                currentQuestion++;
             } else {
-                profileBtn.style.display = 'none';
+                showScreen('screen2');
             }
         }
 
-        // Удержание кнопки
-        function startHold() {
-            if (gameStarted || !currentUser) {
-                if (!currentUser) {
-                    showAuthModal();
-                }
-                return;
-            }
+        // Управление экранами
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showDisclaimer() {
+            showScreen('screen3');
+        }
+
+        function startRiddles() {
+            showScreen('screen4');
+            startTimer('timer1', 24 * 60 * 60); // 24 часа
+        }
+
+        // Таймеры
+        let timerIntervals = {};
+
+        function startTimer(timerId, seconds) {
+            const timer = document.getElementById(timerId);
+            let remaining = seconds;
             
-            const startBtn = document.getElementById('startBtnCircle');
-            const progressRing = document.getElementById('progressRing');
-            
-            startBtn.classList.add('holding');
-            holdProgress = 0;
-            
-            holdTimer = setInterval(() => {
-                holdProgress += 10;
-                const progress = (holdProgress / HOLD_DURATION) * 360;
-                progressRing.style.background = `conic-gradient(transparent 0deg, #00ff41 ${progress}deg)`;
+            timerIntervals[timerId] = setInterval(() => {
+                remaining--;
                 
-                if (holdProgress >= HOLD_DURATION) {
-                    stopHold();
-                    startGame();
-                }
-            }, 10);
-        }
-
-        function stopHold() {
-            if (holdTimer) {
-                clearInterval(holdTimer);
-                holdTimer = null;
-            }
-            
-            const startBtn = document.getElementById('startBtnCircle');
-            const progressRing = document.getElementById('progressRing');
-            
-            startBtn.classList.remove('holding');
-            progressRing.style.background = `conic-gradient(transparent 0deg, #00ff41 0deg)`;
-        }
-
-        // Запуск игры
-        function startGame() {
-            if (gameStarted) return;
-            
-            gameStarted = true;
-            const startBtn = document.getElementById('startBtnCircle');
-            const timer = document.getElementById('timer');
-            const errorMessage = document.getElementById('errorMessage');
-            
-            startBtn.style.display = 'none';
-            
-            if (paidUser) {
-                startRealTimer(3, 43, 12);
-                timer.classList.add('active');
-            } else {
-                startDemoTimer();
-            }
-        }
-
-        // Таймеры (остаются без изменений)
-        function startRealTimer(hours, minutes, seconds) {
-            const timer = document.getElementById('timer');
-            let totalSeconds = hours * 3600 + minutes * 60 + seconds;
-            
-            const interval = setInterval(() => {
-                if (totalSeconds <= 0) {
-                    clearInterval(interval);
+                if (remaining <= 0) {
+                    clearInterval(timerIntervals[timerId]);
                     timer.textContent = "00:00:00";
+                    alert("Время вышло! Ты выбываешь из игры.");
                     return;
                 }
                 
-                totalSeconds--;
+                if (remaining <= 3600) { // Меньше часа
+                    timer.classList.add('warning');
+                }
                 
-                const h = Math.floor(totalSeconds / 3600);
-                const m = Math.floor((totalSeconds % 3600) / 60);
-                const s = totalSeconds % 60;
+                const h = Math.floor(remaining / 3600);
+                const m = Math.floor((remaining % 3600) / 60);
+                const s = remaining % 60;
                 
                 timer.textContent = 
                     `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             }, 1000);
         }
 
-        function startDemoTimer() {
-            const timer = document.getElementById('timer');
-            const errorMessage = document.getElementById('errorMessage');
-            let seconds = 10;
+        // Подсказки
+        function showHint(hintId) {
+            const hint = document.getElementById(hintId);
+            hint.classList.toggle('active');
+        }
+
+        // Проверка ответов
+        const attempts = {1: 4, 2: 4};
+
+        function checkAnswer(riddleNumber, correctAnswer) {
+            const input = document.getElementById(`answer1_${riddleNumber}`);
+            const attemptsCounter = document.getElementById(`attempts${riddleNumber}`);
+            const userAnswer = input.value.trim().toLowerCase();
             
-            timer.classList.add('active');
-            timer.textContent = `00:00:${seconds.toString().padStart(2, '0')}`;
-            
-            const interval = setInterval(() => {
-                seconds--;
-                timer.textContent = `00:00:${seconds.toString().padStart(2, '0')}`;
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                clearInterval(timerIntervals[`timer${riddleNumber}`]);
+                showScreen(`screen${4 + riddleNumber * 2 - 1}`); // Переход к факту
+            } else {
+                attempts[riddleNumber]--;
+                attemptsCounter.textContent = `Попыток осталось: ${attempts[riddleNumber]}`;
                 
-                if (seconds <= 0) {
-                    clearInterval(interval);
-                    timer.classList.remove('active');
-                    errorMessage.classList.add('active');
-                    playErrorSound();
+                if (attempts[riddleNumber] <= 0) {
+                    alert("Попытки закончились! Ты выбываешь из игры.");
+                    showScreen('screen1');
+                } else {
+                    alert("Неверный ответ! Попробуй ещё раз.");
+                    input.value = '';
+                    input.focus();
                 }
-            }, 1000);
-        }
-
-        // Остальные функции (без изменений)
-        function toggleInfo() {
-            const infoPanel = document.getElementById('infoPanel');
-            infoPanel.classList.toggle('active');
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-                const console = document.getElementById('console');
-                console.classList.toggle('active');
-                if (console.classList.contains('active')) {
-                    document.getElementById('consoleInput').focus();
-                }
-            }
-        });
-
-        document.getElementById('consoleInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const command = this.value.toLowerCase();
-                this.value = '';
-                
-                switch(command) {
-                    case 'status':
-                        addConsoleOutput('Статус: СИСТЕМА АКТИВНА');
-                        break;
-                    case 'help':
-                        addConsoleOutput('Доступные команды: status, decode, help, clear');
-                        break;
-                    case 'decode':
-                        addConsoleOutput('Криптографический модуль не инициализирован');
-                        break;
-                    case 'clear':
-                        clearConsole();
-                        break;
-                    default:
-                        addConsoleOutput(`Неизвестная команда: ${command}`);
-                }
-            }
-        });
-
-        function addConsoleOutput(text) {
-            const console = document.getElementById('console');
-            const output = document.createElement('div');
-            output.textContent = `> ${text}`;
-            output.style.marginTop = '5px';
-            console.appendChild(output);
-            console.scrollTop = console.scrollHeight;
-        }
-
-        function clearConsole() {
-            const console = document.getElementById('console');
-            const inputs = console.querySelectorAll('div');
-            inputs.forEach(input => {
-                if (input !== console.firstElementChild) {
-                    input.remove();
-                }
-            });
-        }
-
-        function playErrorSound() {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.5);
-                
-                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
-                oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.5);
-            } catch (e) {
-                console.log("Audio not supported");
             }
         }
 
-        function showRandomSystemMessage() {
-            const messages = [
-                "Обнаружено скрытое соединение...",
-                "Сканирование сети...",
-                "Криптографический ключ не обнаружен",
-                "Протокол инициализирован",
-                "Поиск сигнала..."
-            ];
-            
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            addConsoleOutput(`[СИСТЕМА]: ${randomMessage}`);
+        function nextRiddle(nextRiddleNumber) {
+            showScreen(`screen${4 + (nextRiddleNumber - 1) * 2}`);
+            startTimer(`timer${nextRiddleNumber}`, 24 * 60 * 60);
         }
 
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
-            createQuestionMarks();
-            
-            // Проверяем сохраненного пользователя
-            const savedUser = localStorage.getItem('cryptos_user');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                updateUI();
-            }
-            
-            setInterval(showRandomSystemMessage, 15000);
+            createParticles();
         });
     </script>
 </body>
