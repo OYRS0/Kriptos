@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>КРИПТОС | Испытай свою смекалку</title>
+    <title>КРИПТОС | Испытай свой интеллект</title>
     <style>
         * {
             margin: 0;
@@ -12,12 +12,12 @@
         }
 
         body {
-            background: #0a0a0a;
-            color: #00ff41;
-            font-family: 'Courier New', monospace;
+            background: #000000;
+            color: #00ff88;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             height: 100vh;
             overflow: hidden;
-            background: linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+            background: linear-gradient(135deg, #000000 0%, #0a0f1a 100%);
         }
 
         .screen {
@@ -26,7 +26,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
             position: relative;
         }
@@ -35,80 +35,53 @@
             display: flex;
         }
 
-        /* Анимированный фон с частицами */
-        .particles {
+        /* Технологичный фон с сеткой */
+        .tech-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             z-index: -1;
+            animation: gridMove 20s linear infinite;
         }
 
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #00ff41;
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-            opacity: 0.3;
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.5;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-100px) translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Заголовки */
+        /* Главный заголовок */
         .main-title {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 20px #00ff41;
-            background: linear-gradient(45deg, #00ff41, #00cc33);
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: titleGlow 2s ease-in-out infinite alternate;
+            letter-spacing: -2px;
         }
 
-        @keyframes titleGlow {
-            from {
-                text-shadow: 0 0 20px #00ff41;
-            }
-            to {
-                text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41;
-            }
-        }
-
-        /* Провокационные вопросы */
+        /* Вопросы */
         .question-box {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px solid #00ff41;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 1rem 0;
-            max-width: 600px;
-            backdrop-filter: blur(10px);
-            animation: slideUp 0.5s ease-out;
+            background: rgba(0, 255, 136, 0.02);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            max-width: 700px;
+            backdrop-filter: blur(20px);
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        @keyframes slideUp {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -117,54 +90,68 @@
         }
 
         .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-weight: 500;
         }
 
         /* Кнопки */
         .btn {
-            background: transparent;
-            border: 2px solid #00ff41;
-            color: #00ff41;
-            padding: 15px 40px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.5);
+            color: #00ff88;
+            padding: 18px 50px;
             font-size: 1.1rem;
-            font-family: 'Courier New', monospace;
+            font-family: inherit;
             cursor: pointer;
             margin: 1rem 0;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
         }
 
-        .btn:hover {
-            background: #00ff41;
-            color: #0a0a0a;
-            box-shadow: 0 0 25px #00ff41;
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+            transition: left 0.5s;
         }
 
-        .btn:active {
-            transform: scale(0.95);
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: #00ff88;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
         }
 
         /* Таймер */
         .timer {
-            font-size: 2.5rem;
-            font-family: 'Courier New', monospace;
-            margin: 1rem 0;
-            text-shadow: 0 0 10px #00ff41;
-            background: rgba(0, 255, 65, 0.1);
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 1px solid #00ff41;
+            font-size: 2.8rem;
+            font-family: 'SF Mono', 'Courier New', monospace;
+            margin: 2rem 0;
+            background: rgba(0, 255, 136, 0.05);
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            font-weight: 700;
+            letter-spacing: 2px;
         }
 
         .timer.warning {
             color: #ff4444;
-            text-shadow: 0 0 10px #ff4444;
+            border-color: rgba(255, 68, 68, 0.5);
             animation: pulse 1s infinite;
         }
 
@@ -175,52 +162,55 @@
 
         /* Загадки */
         .riddle-box {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px solid #00ff41;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 1rem 0;
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2rem 0;
             max-width: 800px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
         }
 
         .riddle-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #00ff41;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: #00ff88;
+            font-weight: 700;
         }
 
         .riddle-text {
             font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .hint-btn {
             background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            padding: 8px 15px;
-            margin: 10px 0;
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            color: #00ff88;
+            padding: 10px 20px;
+            margin: 15px 0;
             cursor: pointer;
-            font-family: 'Courier New', monospace;
-            border-radius: 15px;
+            font-family: inherit;
+            border-radius: 10px;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         .hint-btn:hover {
-            background: #00ff41;
-            color: #0a0a0a;
+            background: rgba(0, 255, 136, 0.1);
         }
 
         .hint {
             display: none;
-            background: rgba(0, 255, 65, 0.1);
-            border-left: 2px solid #00ff41;
-            padding: 10px;
-            margin: 10px 0;
+            background: rgba(0, 255, 136, 0.05);
+            border-left: 3px solid #00ff88;
+            padding: 15px;
+            margin: 15px 0;
             font-size: 0.9rem;
             border-radius: 0 10px 10px 0;
+            text-align: left;
         }
 
         .hint.active {
@@ -231,54 +221,75 @@
         .answer-input {
             width: 100%;
             max-width: 400px;
-            background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            padding: 12px 15px;
-            font-family: 'Courier New', monospace;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+            padding: 15px 20px;
+            font-family: inherit;
             font-size: 1rem;
-            margin: 1rem 0;
+            margin: 1.5rem 0;
             border-radius: 10px;
             outline: none;
+            transition: all 0.3s ease;
         }
 
         .answer-input:focus {
-            box-shadow: 0 0 15px #00ff41;
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
         }
 
         .attempts-counter {
             font-size: 0.9rem;
-            color: #888;
+            color: rgba(255, 255, 255, 0.6);
             margin-bottom: 1rem;
+            font-weight: 500;
         }
 
-        /* Факты о КРИПТОС */
+        /* Факты */
         .fact-box {
-            background: rgba(0, 255, 65, 0.1);
-            border: 1px solid #00ff41;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 1rem 0;
-            max-width: 600px;
-            backdrop-filter: blur(10px);
-            animation: slideUp 0.5s ease-out;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            max-width: 700px;
+            backdrop-filter: blur(20px);
         }
 
         .fact-text {
-            font-size: 1.2rem;
-            line-height: 1.5;
+            font-size: 1.3rem;
+            line-height: 1.6;
             font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         /* Адаптивность */
         @media (max-width: 768px) {
             .main-title {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
             }
             
             .question-box, .riddle-box, .fact-box {
-                padding: 1.5rem;
-                margin: 0.5rem;
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .timer {
+                font-size: 2.2rem;
+            }
+            
+            .btn {
+                padding: 15px 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 2.2rem;
             }
             
             .question-text {
@@ -286,29 +297,20 @@
             }
             
             .timer {
-                font-size: 2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             .btn {
-                padding: 12px 30px;
+                padding: 12px 25px;
                 font-size: 1rem;
-            }
-            
-            .timer {
-                font-size: 1.5rem;
             }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Анимированные частицы -->
-    <div class="particles" id="particles"></div>
+    <!-- Технологичный фон -->
+    <div class="tech-bg"></div>
 
     <!-- Экран 1: Провокационные вопросы -->
     <div class="screen active" id="screen1">
@@ -326,7 +328,7 @@
     <!-- Экран 2: Принципы -->
     <div class="screen" id="screen2">
         <div class="question-box">
-            <div class="question-text" style="font-size: 1.4rem;">
+            <div class="question-text" style="font-size: 1.5rem;">
                 Тут не решает ничего, кроме твоей смекалки и находчивости!
             </div>
         </div>
@@ -351,27 +353,24 @@
         <div class="timer" id="timer1">24:00:00</div>
         
         <div class="riddle-box">
-            <div class="riddle-title">Задание 1.1: "Социальный инжиниринг"</div>
+            <div class="riddle-title">Задание 1.1: "Координатный детектив"</div>
             <div class="riddle-text">
-                <strong>Цель:</strong> Найти закрытый аккаунт в Instagram.<br><br>
-                Подсказки из его Stories:
-                <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
-                    <li>Увлекается урбанистикой и фотографирует граффити</li>
-                    <li>Был на выставке Василия Ложкина в Москве в 2023</li>
-                    <li>Работает в IT-сфере</li>
-                </ul>
-                <strong>Задача:</strong> Найди username этого аккаунта.
+                <strong>Цель:</strong> Найти место по описанию.<br><br>
+                В городском форуме Екатеринбурга пользователь жаловался:
+                <blockquote style="margin: 15px 0; padding: 15px; border-left: 3px solid #00ff88; background: rgba(0,255,136,0.05);">
+                    "Каждый день прохожу мимо заброшенного завода с красной кирпичной трубой, где сейчас открыли лофт-пространство. Рядом стоит старый советский автобус, переделанный под кофейню."
+                </blockquote>
+                <strong>Задача:</strong> Найди координаты этого места (широта и долгота через подчёркивание).
             </div>
             
             <button class="hint-btn" onclick="showHint('hint1_1')">💡 Подсказка</button>
             <div class="hint" id="hint1_1">
-                Аккаунт упоминался в комментариях под постом о street-art в паблике "Арт-Москва". 
-                Ищи по геолокациям выставок и хештегам #уличноеискусство.
+                Ищи лофт-пространства в промышленной зоне Екатеринбурга. Координаты должны быть в формате: XX.XXXX_YY.YYYY
             </div>
 
             <div class="attempts-counter" id="attempts1">Попыток осталось: 4</div>
-            <input type="text" class="answer-input" id="answer1_1" placeholder="Введите username...">
-            <button class="btn" onclick="checkAnswer(1, 'urban_explorer_23')">Проверить ответ</button>
+            <input type="text" class="answer-input" id="answer1_1" placeholder="Введите координаты...">
+            <button class="btn" onclick="checkAnswer(1, '56.8389_60.6057')">Проверить ответ</button>
         </div>
     </div>
 
@@ -379,8 +378,9 @@
     <div class="screen" id="screen5">
         <div class="fact-box">
             <div class="fact-text">
-                "КРИПТОС — закрытый клуб, где статус определяется не деньгами, а интеллектом. 
-                Только 2% людей проходят первый отбор. Ты доказал, что можешь быть одним из нас."
+                "Мы не масоны и не Цикада. Мы — новая эра. КРИПТОС объединяет тех, 
+                кто мыслит иначе. Здесь нет места старым догмам — только технологии, 
+                интеллект и будущее."
             </div>
         </div>
         <button class="btn" onclick="nextRiddle(2)">Принять вызов дальше</button>
@@ -391,25 +391,24 @@
         <div class="timer" id="timer2">24:00:00</div>
         
         <div class="riddle-box">
-            <div class="riddle-title">Задание 1.2: "Координатный детектив"</div>
+            <div class="riddle-title">Задание 1.2: "Данные из прошлого"</div>
             <div class="riddle-text">
-                <strong>Цель:</strong> Найти место по описанию.<br><br>
-                Отрывок из жалобы в городском паблике Ростова-на-Дону:
-                <blockquote style="margin: 15px 0; padding: 10px; border-left: 2px solid #00ff41; background: rgba(0,255,65,0.05);">
-                    "Уже месяц не могут починить разбитую плитку у входа в парк 'Южный' рядом с детской площадкой, где есть горка в виде дракона."
-                </blockquote>
-                <strong>Задача:</strong> Найди координаты этого места (широта и долгота через подчёркивание).
+                <strong>Цель:</strong> Найти устаревшую информацию в веб-архиве.<br><br>
+                В 2013 году в Википедии была статья о социальной сети, которая тогда называлась иначе.
+                <br><br>
+                <strong>Задача:</strong> Найди в archive.org статью Википедии "ВКонтакте" за 15 марта 2013 года. 
+                Какое альтернативное название соцсети указано в первом абзаце?
             </div>
             
             <button class="hint-btn" onclick="showHint('hint1_2')">💡 Подсказка</button>
             <div class="hint" id="hint1_2">
-                Парк "Южный" находится в Советском районе. Ищи детскую площадку с нестандартным дизайном 
-                на картах Яндекса/Google. Формат ответа: XX.XXXX_YY.YYYY
+                Используй сайт archive.org. Введи: https://ru.wikipedia.org/wiki/ВКонтакте
+                Выбери дату 15.03.2013 и найди альтернативное название в первом абзаце.
             </div>
 
             <div class="attempts-counter" id="attempts2">Попыток осталось: 4</div>
-            <input type="text" class="answer-input" id="answer1_2" placeholder="Введите координаты...">
-            <button class="btn" onclick="checkAnswer(2, '47.2215_39.7243')">Проверить ответ</button>
+            <input type="text" class="answer-input" id="answer1_2" placeholder="Введите название...">
+            <button class="btn" onclick="checkAnswer(2, 'vkontakte.ru')">Проверить ответ</button>
         </div>
     </div>
 
@@ -417,29 +416,130 @@
     <div class="screen" id="screen7">
         <div class="fact-box">
             <div class="fact-text">
-                "Члены КРИПТОС получают доступ к эксклюзивным возможностям: от инвестиционных советов 
-                до закрытых карьерных предложений. Ты на шаг ближе к этому."
+                "Пока другие спорят о прошлом, мы строим будущее. КРИПТОС — это сообщество 
+                создателей, а не потребителей. Здесь ценят действие, а не слова."
             </div>
         </div>
         <button class="btn" onclick="nextRiddle(3)">Продолжить путь</button>
     </div>
 
-    <script>
-        // Создание анимированных частиц
-        function createParticles() {
-            const particles = document.getElementById('particles');
-            const count = 50;
+    <!-- Экран 8: Загадка 1.3 -->
+    <div class="screen" id="screen8">
+        <div class="timer" id="timer3">24:00:00</div>
+        
+        <div class="riddle-box">
+            <div class="riddle-title">Задание 1.3: "Цифровой археолог"</div>
+            <div class="riddle-text">
+                <strong>Цель:</strong> Найти скрытые данные в интернете.<br><br>
+                В 2021 году один IT-стартап из Новосибирска получил инвестиции, но потом пропал из медиа-поля.
+                <br><br>
+                <strong>Задача:</strong> Найди название этого стартапа и сумму инвестиций в долларах. 
+                Ответ в формате: Название_Сумма
+            </div>
             
-            for (let i = 0; i < count; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.width = particle.style.height = (Math.random() * 3 + 1) + 'px';
-                particles.appendChild(particle);
-            }
-        }
+            <button class="hint-btn" onclick="showHint('hint1_3')">💡 Подсказка</button>
+            <div class="hint" id="hint1_3">
+                Ищи в архивах TechCrunch или российских IT-изданий за 2021 год. Стартап занимался 
+                искусственным интеллектом для образования.
+            </div>
 
+            <div class="attempts-counter" id="attempts3">Попыток осталось: 4</div>
+            <input type="text" class="answer-input" id="answer1_3" placeholder="Введите ответ...">
+            <button class="btn" onclick="checkAnswer(3, 'EduAI_2500000')">Проверить ответ</button>
+        </div>
+    </div>
+
+    <!-- Экран 9: Факт после загадки 1.3 -->
+    <div class="screen" id="screen9">
+        <div class="fact-box">
+            <div class="fact-text">
+                "Мы моложе, технологичнее и смелее. КРИПТОС — для тех, кто не боится 
+                нарушать правила и создавать новые. Здесь твой интеллект — твой пропуск в элиту."
+            </div>
+        </div>
+        <button class="btn" onclick="nextRiddle(4)">Следующий уровень</button>
+    </div>
+
+    <!-- Экран 10: Загадка 1.4 -->
+    <div class="screen" id="screen10">
+        <div class="timer" id="timer4">24:00:00</div>
+        
+        <div class="riddle-box">
+            <div class="riddle-title">Задание 1.4: "Географический шифр"</div>
+            <div class="riddle-text">
+                <strong>Цель:</strong> Расшифровать координаты через исторические данные.<br><br>
+                В 1965 году в этом месте был установлен памятник первому спутнику. 
+                Высота памятника — 4 метра, а год установки умножен на высоту дает ключевое число.
+                <br><br>
+                <strong>Задача:</strong> Найди координаты памятника (широта_долгота).
+            </div>
+            
+            <button class="hint-btn" onclick="showHint('hint1_4')">💡 Подсказка</button>
+            <div class="hint" id="hint1_4">
+                Памятник находится в Москве, на территории ВДНХ. Ищи памятник первому искусственному спутнику Земли.
+            </div>
+
+            <div class="attempts-counter" id="attempts4">Попыток осталось: 4</div>
+            <input type="text" class="answer-input" id="answer1_4" placeholder="Введите координаты...">
+            <button class="btn" onclick="checkAnswer(4, '55.8296_37.6320')">Проверить ответ</button>
+        </div>
+    </div>
+
+    <!-- Экран 11: Факт после загадки 1.4 -->
+    <div class="screen" id="screen11">
+        <div class="fact-box">
+            <div class="fact-text">
+                "Забудь о конспирологии. КРИПТОС — это про реальные возможности. 
+                Проекты, инвестиции, карьера. Здесь встречаются те, кто меняет мир, 
+                а не обсуждает его за кулисами."
+            </div>
+        </div>
+        <button class="btn" onclick="nextRiddle(5)">Финальное испытание</button>
+    </div>
+
+    <!-- Экран 12: Загадка 1.5 -->
+    <div class="screen" id="screen12">
+        <div class="timer" id="timer5">24:00:00</div>
+        
+        <div class="riddle-box">
+            <div class="riddle-title">Задание 1.5: "Социальный инжиниринг"</div>
+            <div class="riddle-text">
+                <strong>Цель:</strong> Найти закрытый аккаунт в Instagram.<br><br>
+                Подсказки из его Stories:
+                <ul style="text-align: left; margin: 20px 0; padding-left: 25px;">
+                    <li>Увлекается урбанистикой и фотографирует граффити</li>
+                    <li>Был на выставке Василия Ложкина в Москве в 2023</li>
+                    <li>Работает в IT-сфере</li>
+                </ul>
+                <strong>Задача:</strong> Найди username этого аккаунта.
+            </div>
+            
+            <button class="hint-btn" onclick="showHint('hint1_5')">💡 Подсказка</button>
+            <div class="hint" id="hint1_5">
+                Аккаунт упоминался в комментариях под постом о street-art в паблике "Арт-Москва". 
+                Ищи по геолокациям выставок и хештегам #уличноеискусство.
+            </div>
+
+            <div class="attempts-counter" id="attempts5">Попыток осталось: 4</div>
+            <input type="text" class="answer-input" id="answer1_5" placeholder="Введите username...">
+            <button class="btn" onclick="checkAnswer(5, 'urban_explorer_23')">Проверить ответ</button>
+        </div>
+    </div>
+
+    <!-- Экран 13: Финальный экран -->
+    <div class="screen" id="screen13">
+        <div class="fact-box">
+            <div class="fact-text">
+                "Ты прошел первый фильтр. Твой интеллект подтвержден. 
+                <br><br>
+                В ближайшие 24 часа с тобой свяжутся для следующего этапа. 
+                <br><br>
+                Добро пожаловать в КРИПТОС."
+            </div>
+        </div>
+    </div>
+
+    <script>
         // Вопросы
         const questions = [
             "Ты думаешь, благодаря деньгам можно решить любую проблему?",
@@ -473,7 +573,7 @@
 
         function startRiddles() {
             showScreen('screen4');
-            startTimer('timer1', 24 * 60 * 60); // 24 часа
+            startTimer('timer1', 24 * 60 * 60);
         }
 
         // Таймеры
@@ -490,10 +590,11 @@
                     clearInterval(timerIntervals[timerId]);
                     timer.textContent = "00:00:00";
                     alert("Время вышло! Ты выбываешь из игры.");
+                    showScreen('screen1');
                     return;
                 }
                 
-                if (remaining <= 3600) { // Меньше часа
+                if (remaining <= 3600) {
                     timer.classList.add('warning');
                 }
                 
@@ -513,7 +614,7 @@
         }
 
         // Проверка ответов
-        const attempts = {1: 4, 2: 4};
+        const attempts = {1: 4, 2: 4, 3: 4, 4: 4, 5: 4};
 
         function checkAnswer(riddleNumber, correctAnswer) {
             const input = document.getElementById(`answer1_${riddleNumber}`);
@@ -522,7 +623,11 @@
             
             if (userAnswer === correctAnswer.toLowerCase()) {
                 clearInterval(timerIntervals[`timer${riddleNumber}`]);
-                showScreen(`screen${4 + riddleNumber * 2 - 1}`); // Переход к факту
+                if (riddleNumber === 5) {
+                    showScreen('screen13');
+                } else {
+                    showScreen(`screen${4 + riddleNumber * 2 - 1}`);
+                }
             } else {
                 attempts[riddleNumber]--;
                 attemptsCounter.textContent = `Попыток осталось: ${attempts[riddleNumber]}`;
@@ -542,11 +647,6 @@
             showScreen(`screen${4 + (nextRiddleNumber - 1) * 2}`);
             startTimer(`timer${nextRiddleNumber}`, 24 * 60 * 60);
         }
-
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-        });
     </script>
 </body>
 </html>
